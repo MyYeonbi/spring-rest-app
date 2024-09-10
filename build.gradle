@@ -1,0 +1,102 @@
+plugins {
+    id 'java'
+    id 'war'  // war 플러그인 추가 (WAR 파일로 배포)
+}
+
+group = 'org.project'
+version = '1.0-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()  // Maven 중앙 저장소에서 의존성 다운로드
+}
+
+dependencies {
+    // === 스프링 프레임워크 및 관련 의존성 ===
+    // Spring Core 및 Spring Context 의존성 (스프링 기본 기능)
+    implementation 'org.springframework:spring-context:5.3.20'
+
+    // Spring Data JPA 의존성 (Spring과 JPA 연동)
+    implementation 'org.springframework.data:spring-data-jpa:2.6.0'
+
+    // JPA 표준 API 의존성 (표준 JPA 인터페이스)
+    implementation 'javax.persistence:javax.persistence-api:2.2'
+
+    // Hibernate JPA 구현체 (JPA의 기본 구현체인 Hibernate 사용)
+    implementation 'org.hibernate:hibernate-core:5.6.10.Final'
+
+    // MySQL 드라이버 (MySQL 데이터베이스와의 연결을 위한 JDBC 드라이버)
+    implementation 'mysql:mysql-connector-java:8.0.32'
+
+    // Spring Web 관련 의존성 (Spring MVC 및 RESTful API 구현에 사용)
+    implementation 'org.springframework:spring-webmvc:5.3.20'
+
+    dependencies {
+        // Spring Data JPA 의존성
+        implementation 'org.springframework.data:spring-data-jpa'
+
+        // Hibernate JPA 구현체
+        implementation 'org.hibernate:hibernate-core'
+
+        // JPA 표준 API 의존성
+        implementation 'javax.persistence:javax.persistence-api'
+
+        // 추가적으로 MySQL 드라이버가 필요하다면 추가
+        implementation 'mysql:mysql-connector-java'
+
+        // 다른 필요 의존성들...
+    }
+
+
+
+    // === 로깅 및 유틸리티 의존성 ===
+    // Lombok 의존성 (코드 축약을 위한 도구)
+    compileOnly 'org.projectlombok:lombok:1.18.24'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+    // Logback 및 SLF4J 의존성 (로깅 라이브러리)
+    implementation 'ch.qos.logback:logback-classic:1.2.11'
+
+    // HikariCP 의존성 (고성능 데이터베이스 연결 풀)
+    implementation 'com.zaxxer:HikariCP:5.0.1'
+
+
+    // Expression Language (EL) 추가
+    implementation 'org.glassfish:javax.el:3.0.0'
+
+    // Valid 의존성 (검증 부분)
+    implementation 'javax.validation:validation-api:2.0.1.Final'
+    implementation 'org.hibernate.validator:hibernate-validator:6.0.13.Final'
+
+    // === 테스트 관련 의존성 ===
+    // JUnit 5 의존성 (테스트 프레임워크)
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    // Mockito 의존성 (단위 테스트용 Mock 라이브러리)
+    testImplementation 'org.mockito:mockito-core:3.11.2'
+    testImplementation 'org.mockito:mockito-junit-jupiter:3.11.2'
+
+    // Spring 테스트 의존성 (Spring 컨텍스트를 이용한 통합 테스트)
+    testImplementation 'org.springframework:spring-test:5.3.9'
+
+    // JSON 처리 라이브러리 (JSON 요청/응답 처리에 사용)
+    testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.12.3'
+
+    // Servlet API 추가 (테스트 컴파일 시 서블릿 API 필요)
+    testImplementation 'javax.servlet:javax.servlet-api:4.0.1'
+
+    // Hamcrest 및 기타 테스트 관련 유틸리티 (테스트 검증 라이브러리)
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+
+    // JSONPath (JSON 응답 내용 검증을 위한 라이브러리)
+    testImplementation 'com.jayway.jsonpath:json-path:2.7.0'
+}
+
+war {
+    archiveFileName = 'backend.war'  // 생성되는 WAR 파일 이름 설정
+}
+
+test {
+    useJUnitPlatform()  // JUnit 플랫폼 사용 설정
+}

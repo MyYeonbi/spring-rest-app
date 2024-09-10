@@ -1,0 +1,59 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx.xsd
+           http://www.springframework.org/schema/data/jpa
+           http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+    <!-- JPA 레포지토리 설정 -->
+    <jpa:repositories base-package="com.example.repository"/>
+
+    <!-- Component Scan -->
+    <context:component-scan base-package="com.example"/>
+
+    <!-- DataSource 설정 -->
+    <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource">
+        <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/your_database"/>
+        <property name="username" value="your_username"/>
+        <property name="password" value="your_password"/>
+        <!-- HikariCP 설정 추가 -->
+        <property name="maximumPoolSize" value="10"/> <!-- 최대 10개의 연결 -->
+        <property name="minimumIdle" value="2"/> <!-- 최소 2개의 유휴 연결 -->
+        <property name="connectionTimeout" value="30000"/> <!-- 30초 대기 후 연결 실패 -->
+    </bean>
+
+    <!-- JPA EntityManagerFactory 설정 -->
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="com.example.model"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL8Dialect</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop> <!-- 필요에 따라 validate로 변경 가능 -->
+                <prop key="hibernate.show_sql">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- Transaction Manager 설정 -->
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <!-- Enable Transaction Management -->
+    <tx:annotation-driven/>
+
+    <!-- JPA 레파지토리 등록 -->
+    <jpa:repositories base-package="com.example.repository"/>
+</beans>
